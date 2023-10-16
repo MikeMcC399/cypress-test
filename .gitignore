@@ -1,0 +1,14 @@
+.vscode/terminals.json
+packages/cms/prod.tar.gz
+node_modules
+.vercel
+*.env
+*.env.*
+!.enc.env
+!.enc.env.*
+**/.webpack
+**/.sfdx
+**/.serverless
+*.key
+.DS_Store
+!*.enc.key
