@@ -1,0 +1,49 @@
+name: Build stack and deploy
+
+# TODO CHECK TRIGGERS
+on:
+  workflow_dispatch:
+  push:
+
+# permission can be added at job level or workflow level
+permissions:
+  id-token: write
+  contents: read # This is required for actions/checkout
+  pull-requests: write
+
+# TODO CHECK THIS
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-test:
+    runs-on: ubuntu-22.04
+    name: Run test
+    timeout-minutes: 60
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          pnpm i --frozen-lockfile
+      
+      - name: Test
+        uses: cypress-io/github-action@v6
+        with:
+          install: false
+          project: ./packages/test/
+          browser: chrome
