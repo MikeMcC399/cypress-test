@@ -5,6 +5,9 @@ on:
   workflow_dispatch:
   push:
 
+env:
+  DEBUG: '@cypress/github-action'
+
 # permission can be added at job level or workflow level
 permissions:
   id-token: write
